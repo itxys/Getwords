@@ -1,0 +1,18 @@
+{
+    "categories": [
+        {
+            "label": "角色",
+            "items": [
+                {
+                    "label": "女性",
+                    "items": [
+                        { "label": "动漫" }
+                    ]
+                },
+                { "label": "男性" }
+            ]
+        },
+        { "label": "场景" },
+        { "label": "UI" }
+    ]
+}
