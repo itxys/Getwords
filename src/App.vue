@@ -40,17 +40,16 @@
     </div>
   </div>
 </template>
-
 <script>
 import Header from "./components/Header.vue";
 import Sidebar from "./components/Sidebar.vue";
 import Breadcrumb from "./components/Breadcrumb.vue";
 import PromptList from "./components/PromptList.vue";
 import Footer from "./components/Footer.vue";
-import PromptList from "./components/PromptList.vue";
 import PromptManager from "./components/PromptManager.vue";
 import TreeNav from "./components/TreeNav.vue";
 import SearchBar from "./components/SearchBar.vue";
+import axios from 'axios';
 
 export default {
   name: "App",
@@ -62,7 +61,6 @@ export default {
     Header,
     Sidebar,
     Breadcrumb,
-    PromptList,
     Footer,
   },
   data() {
@@ -86,9 +84,16 @@ export default {
       );
     },
   },
+  created() {
+    axios.get('http://localhost:3000/prompts').then((response) => {
+      this.prompts = response.data;
+      this.filteredPrompts = response.data;
+    }).catch((error) => {
+      console.log(error);
+    });
+  },
 };
 </script>
-
 <style>
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
@@ -125,18 +130,6 @@ export default {
   color: #666;
 }
 </style>
-<script>
-// ...
-import api from "./services/api";
+from flask_cors import CORS
 
-export default {
-  // ...
-  created() {
-    api.getPrompts().then((response) => {
-      this.prompts = response.data;
-      this.filteredPrompts = response.data;
-    });
-  },
-};
-</script>
-<router-view />
+CORS(app, resources={r'*': {'origins': '*'}})
