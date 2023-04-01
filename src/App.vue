@@ -1,132 +1,69 @@
 <template>
   <div id="app">
-    <Header />
-    <div class="main">
-      <Sidebar />
-      <div class="content">
-        <Breadcrumb />
-        <PromptList />
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">GetWords</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item active">
+            <a class="nav-link" href="#">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li>
+        </ul>
       </div>
-    </div>
-    <Footer />
-    <div class="container">
-      <div class="header">
-        <h1>AI 绘画提示词生成器</h1>
-      </div>
-      <div class="main">
-        <tree-nav :items="navItems" @itemSelected="navItemSelected" />
-        <div class="middle-section">
-          <div class="middle-top">
-            <div class="breadcrumbs">角色 > 女性 > 动漫</div>
-            <search-bar @search="search" />
+    </nav>
+    <div class="container-fluid mt-3">
+      <div class="row">
+        <div class="col-3">
+          <div class="card">
+            <div class="card-header">
+              <h5 class="card-title">Categories</h5>
+            </div>
+            <div class="card-body">
+              <div class="list-group">
+                <router-link tag="a" class="list-group-item list-group-item-action" to="/">All</router-link>
+                <router-link tag="a" class="list-group-item list-group-item-action" v-for="category in categories" :to="'/categories/' + category.name.toLowerCase()" :key="category.id">{{ category.name }}</router-link>
+              </div>
+            </div>
           </div>
-          <prompt-list
-            :prompts="filteredPrompts"
-            @addToPositive="addToPositive"
-            @addToNegative="addToNegative"
-          />
         </div>
-        <prompt-manager
-          :positivePrompts="positivePrompts"
-          :negativePrompts="negativePrompts"
-          @removePositive="removePositive"
-          @removeNegative="removeNegative"
-          @movePositiveToNegative="movePositiveToNegative"
-          @moveNegativeToPositive="moveNegativeToPositive"
-          @clearAll="clearAll"
-          @generate="generate"
-        />
+        <div class="col-9">
+          <router-view></router-view>
+        </div>
       </div>
     </div>
   </div>
 </template>
-<script>
-import Header from "./components/Header.vue";
-import Sidebar from "./components/Sidebar.vue";
-import Breadcrumb from "./components/Breadcrumb.vue";
-import PromptList from "./components/PromptList.vue";
-import Footer from "./components/Footer.vue";
-import PromptManager from "./components/PromptManager.vue";
-import TreeNav from "./components/TreeNav.vue";
-import SearchBar from "./components/SearchBar.vue";
-import axios from 'axios';
 
+<script>
 export default {
-  name: "App",
-  components: {
-    PromptList,
-    PromptManager,
-    TreeNav,
-    SearchBar,
-    Header,
-    Sidebar,
-    Breadcrumb,
-    Footer,
-  },
+  name: 'App',
   data() {
     return {
-      positivePrompts: [],
-      negativePrompts: [],
-      navItems: [
-        // ...
-      ],
-      prompts: [
-        // 提示词列表
-      ],
-      filteredPrompts: [],
-    };
-  },
-  methods: {
-    // ...
-    search(text) {
-      this.filteredPrompts = this.prompts.filter((prompt) =>
-        prompt.text.includes(text)
-      );
-    },
+      categories: []
+    }
   },
   created() {
-    axios.get('http://localhost:3000/prompts').then((response) => {
-      this.prompts = response.data;
-      this.filteredPrompts = response.data;
-    }).catch((error) => {
-      console.log(error);
-    });
+    this.fetchCategories();
   },
-};
+  methods: {
+    fetchCategories() {
+      axios.get('/api/categories')
+        .then(response => {
+          this.categories = response.data;
+        })
+        .catch(error => console.log(error));
+    }
+  }
+}
 </script>
+
 <style>
-#app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-.main {
-  display: flex;
-  flex-direction: row;
-  margin: 1rem;
-}
-
-.content {
-  flex-grow: 1;
-  margin-left: 1rem;
-}
-.middle-section {
-  display: flex;
-  flex-direction: column;
-}
-
-.middle-top {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-}
-
-.breadcrumbs {
-  font-size: 14px;
-  color: #666;
-}
 </style>
