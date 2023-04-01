@@ -1,43 +1,40 @@
 <template>
-    <div>
-      <search-bar @search="search" />
-      <div class="prompt-list">
-        <prompt-item
-          v-for="(prompt, index) in filteredPrompts"
-          :key="index"
-          :prompt="prompt"
-          @addToPositive="addToPositive"
-          @addToNegative="addToNegative"
-        />
+    <div class="prompt-list">
+      <div class="prompt-header">
+        <h2>{{ promptHeader }}</h2>
+        <input type="text" v-model="searchText" placeholder="搜索prompt">
+      </div>
+      <div class="prompt-list-wrapper">
+        <div class="prompt-card" v-for="prompt in filteredPrompts" :key="prompt.id">
+          <div class="prompt-card-content">
+            <h3>{{ prompt.text }}</h3>
+            <ul>
+              <li v-for="(item, index) in prompt.items" :key="index">
+                <span>{{ item }}</span>
+                <div class="prompt-card-actions">
+                  <button @click="addToPositivePrompt(item)">正向</button>
+                  <button @click="addToNegativePrompt(item)">负向</button>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </div>
   </template>
   
   <script>
-  import PromptItem from "./PromptItem.vue";
-  import SearchBar from "./SearchBar.vue";
-  
   export default {
-    components: {
-      PromptItem,
-      SearchBar,
+    name: 'PromptList',
+    props: {
+      promptHeader: String,
+      prompts: Array,
+      positivePrompt: Array,
+      negativePrompt: Array,
     },
     data() {
       return {
-        prompts: [
-          // 示例数据，您可以根据需要替换这些数据
-          {
-            title: "女性角色",
-            positive: ["female character", "woman", "girl"],
-            negative: ["male character", "man", "boy"],
-          },
-          {
-            title: "男性角色",
-            positive: ["male character", "man", "boy"],
-            negative: ["female character", "woman", "girl"],
-          },
-        ],
-        searchText: "",
+        searchText: '',
       };
     },
     computed: {
@@ -45,27 +42,17 @@
         if (!this.searchText) {
           return this.prompts;
         }
-        const lowerSearchText = this.searchText.toLowerCase();
         return this.prompts.filter((prompt) =>
-          prompt.title.toLowerCase().includes(lowerSearchText)
+          prompt.text.toLowerCase().includes(this.searchText.toLowerCase())
         );
       },
     },
     methods: {
-      addToPositive(promptIndex, positiveIndex) {
-        this.$emit("addToPositive", {
-          prompt: this.prompts[promptIndex],
-          index: positiveIndex,
-        });
+      addToPositivePrompt(item) {
+        this.$emit('add-to-positive-prompt', item);
       },
-      addToNegative(promptIndex, negativeIndex) {
-        this.$emit("addToNegative", {
-          prompt: this.prompts[promptIndex],
-          index: negativeIndex,
-        });
-      },
-      search(searchText) {
-        this.searchText = searchText;
+      addToNegativePrompt(item) {
+        this.$emit('add-to-negative-prompt', item);
       },
     },
   };
@@ -74,9 +61,79 @@
   <style scoped>
   .prompt-list {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .prompt-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 800px;
+    margin: 20px 0;
+  }
+  
+  .prompt-list-wrapper {
+    display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
+    width: 100%;
+    max-width: 800px;
   }
-  </style>
   
+  .prompt-card {
+    width: 300px;
+    margin: 10px;
+  }
+  
+  .prompt-card-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+  }
+  
+  .prompt-card-content h3 {
+    margin: 0;
+    font-size: 18px;
+  }
+  
+  .prompt-card-content ul {
+    margin: 10px 0 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .prompt-card-content li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 5px 0;
+    padding: 5px;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .prompt-card-content li span {
+    flex: 1;
+  }
+  
+  .prompt-card-actions {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .prompt-card-actions button {
+    margin: 0 5px;
+    background-color: #007bff;
+    color: #fff;
+    border: none
+  }

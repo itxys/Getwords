@@ -1,5 +1,14 @@
 <template>
   <div id="app">
+    <Header />
+    <div class="main">
+      <Sidebar />
+      <div class="content">
+        <Breadcrumb />
+        <PromptList />
+      </div>
+    </div>
+    <Footer />
     <div class="container">
       <div class="header">
         <h1>AI 绘画提示词生成器</h1>
@@ -33,6 +42,11 @@
 </template>
 
 <script>
+import Header from "./components/Header.vue";
+import Sidebar from "./components/Sidebar.vue";
+import Breadcrumb from "./components/Breadcrumb.vue";
+import PromptList from "./components/PromptList.vue";
+import Footer from "./components/Footer.vue";
 import PromptList from "./components/PromptList.vue";
 import PromptManager from "./components/PromptManager.vue";
 import TreeNav from "./components/TreeNav.vue";
@@ -45,6 +59,11 @@ export default {
     PromptManager,
     TreeNav,
     SearchBar,
+    Header,
+    Sidebar,
+    Breadcrumb,
+    PromptList,
+    Footer,
   },
   data() {
     return {
@@ -71,7 +90,24 @@ export default {
 </script>
 
 <style>
-/* ... */
+#app {
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+}
+
+.main {
+  display: flex;
+  flex-direction: row;
+  margin: 1rem;
+}
+
+.content {
+  flex-grow: 1;
+  margin-left: 1rem;
+}
 .middle-section {
   display: flex;
   flex-direction: column;
@@ -103,3 +139,4 @@ export default {
   },
 };
 </script>
+<router-view />

@@ -1,22 +1,27 @@
-import Vue from 'vue';
-import VueRouter from 'vue-router';
-import Content from '../components/Content.vue';
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import PositivePromptList from '../components/PositivePromptList.vue'
+import NegativePromptList from '../components/NegativePromptList.vue'
 
-Vue.use(VueRouter);
+Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/category/:id',
-    name: 'category',
-    component: Content,
-    props: (route) => ({ categoryName: route.params.id }),
+    path: '/',
+    redirect: '/positive'
   },
-];
+  {
+    path: '/positive',
+    component: PositivePromptList
+  },
+  {
+    path: '/negative',
+    component: NegativePromptList
+  }
+]
 
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes,
-});
+  routes
+})
 
-export default router;
+export default router
