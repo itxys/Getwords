@@ -1,25 +1,28 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import PositivePromptList from '../components/PositivePromptList.vue';
-import NegativePromptList from '../components/NegativePromptList.vue';
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import PositivePromptList from '../components/PositivePromptList.vue'
+import NegativePromptList from '../components/NegativePromptList.vue'
+
+Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    redirect: '/positive',
+    redirect: '/positive'
   },
   {
     path: '/positive',
-    component: PositivePromptList,
+    component: PositivePromptList
   },
   {
     path: '/negative',
-    component: NegativePromptList,
-  },
-];
+    component: NegativePromptList
+  }
+]
 
-const router = createRouter({
-  history: createWebHistory(),
-  routes,
-});
+const router = new VueRouter({
+  mode: 'history',
+  routes
+})
 
-export default router;
+export default router
