@@ -1,18 +1,19 @@
 from flask import Flask, render_template, request, jsonify
-from get_words import GetWords
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite3'
+db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
-@app.route("/")
+class Prompt(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String(120), unique=True, nullable=False)
+
+@app.route('/')
 def index():
-    return render_template("index.html")
-
-@app.route('/getwords', methods=['POST'])
-def get_words():
-    text = request.form['text']
-    result = GetWords(text)
-    return jsonify(result)
+    return render_template('index.html')
 
 if __name__ == '__main__':
     app.run(debug=True)
-    app.run(host='0.0.0.0', port=5000, debug=True)
