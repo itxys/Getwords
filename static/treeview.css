@@ -1,0 +1,33 @@
+/* Treeview styles */
+ul.jquery-treeview,
+ul.jquery-treeview ul {
+  list-style-type: none;
+  padding-left: 20px;
+}
+
+ul.jquery-treeview li {
+  padding: 3px;
+}
+
+ul.jquery-treeview a {
+  text-decoration: none;
+}
+
+ul.jquery-treeview .hover {
+  background-color: #f2f2f2;
+  cursor: pointer;
+}
+
+ul.jquery-treeview .collapsed {
+  background-image: url(../images/collapsed.png);
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding-left: 20px;
+}
+
+ul.jquery-treeview .expanded {
+  background-image: url(../images/expanded.png);
+  background-repeat: no-repeat;
+  background-position: left center;
+  padding-left: 20px;
+}

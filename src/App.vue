@@ -130,6 +130,3 @@ export default {
   color: #666;
 }
 </style>
-from flask_cors import CORS
-
-CORS(app, resources={r'*': {'origins': '*'}})
